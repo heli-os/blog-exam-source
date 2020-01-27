@@ -89,22 +89,6 @@ app.post('/register', (req, res) => {
     });
 });
 
-passport.serializeUser((user, done) => {
-    console.log('serializeUser', user);
-    done(null, user.username);
-});
-
-passport.deserializeUser((id, done) => {
-    console.log('deserializeUser', id)
-    for (let i = 0; i < users.length; i++) {
-        const user = users[i];
-        if (id === user.username) {
-            return done(null, user);
-            // req.user 객체 생성
-        }
-    }
-});
-
 passport.use(new LocalStrategy({
         usernameField: 'username',
         passwordField: 'password'
@@ -124,6 +108,22 @@ passport.use(new LocalStrategy({
         return done(null, false);
     }
 ));
+
+passport.serializeUser((user, done) => {
+    console.log('serializeUser', user);
+    done(null, user.username);
+});
+
+passport.deserializeUser((id, done) => {
+    console.log('deserializeUser', id)
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        if (id === user.username) {
+            return done(null, user);
+            // req.user 객체 생성
+        }
+    }
+});
 
 app.post('/login',
     passport.authenticate(
